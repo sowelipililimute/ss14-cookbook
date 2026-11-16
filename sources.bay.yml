@@ -84,3 +84,89 @@ bay:
       sprite: { rsi: icons/obj/cooking_container.rsi, state: cheesecloth }
       verb: "Age"
       filterSummary: "cheese"
+
+sierra:
+  sourceKind: dm
+  name: "SierraBay 12"
+  description: "Bay if it was 🇷🇺"
+  path: "../SierraBay12"
+  repo: "SierraBay/SierraBay12"
+  extractor: "../Rustractor"
+  methodSprites:
+    mix:
+      rsi: icons/obj/chemical_storage.rsi
+      state: beakerlarge
+    microwave:
+      rsi: icons/obj/machines/cooking_machines.rsi
+      state: mw
+    cut:
+      rsi: icons/obj/weapons/knife.rsi
+      state: kitchenknife
+  mixFillSprite:
+    rsi: icons/obj/reagentfillings.rsi
+    state: beakerlarge100
+  fallbackSprite:
+    rsi: icons/obj/cooking_container.rsi
+    state: mixingbowl
+  defaultAttribution:
+    license: "CC-BY-SA-3.0"
+    copyright: "Baystation 12 and SierraBay contributors; see the repository for details."
+  ignoreSourcesOf:
+    - /datum/reagent/nutriment
+  diets:
+    - stat: protein
+      edibleWhen: { op: "<=", value: 0 }
+      color: "#3a8fb7"
+      hint: "Skrell can eat this food."
+      filterName: "Skrell-edible"
+      filterSummary: "skrell-edible"
+    - stat: sugar
+      edibleWhen: { op: "<", value: 5 }
+      color: "#2e6b2e"
+      hint: "Unathi can eat this food."
+      filterName: "Unathi-edible"
+      filterSummary: "unathi-edible"
+    - stat: protein
+      edibleWhen: { op: ">", value: 0 }
+      color: "#b5651d"
+      hint: "Unathi get nutrition from this food."
+      filterName: "Unathi-nutritious"
+      filterSummary: "unathi-nutritious"
+  appliances:
+    MIX:
+      sprite: { rsi: icons/obj/cooking_container.rsi, state: mixingbowl }
+      verb: "Mix"
+      filterSummary: "mixing bowl"
+    MICROWAVE:
+      default: true
+      sprite: { rsi: icons/obj/machines/cooking_machines.rsi, state: mw }
+      verb: "Microwave"
+      filterSummary: "microwave"
+    OVEN:
+      sprite: { rsi: icons/obj/machines/cooking_machines.rsi, state: ovenclosed }
+      verb: "Bake"
+      filterSummary: "oven"
+    FRYER:
+      sprite: { rsi: icons/obj/machines/cooking_machines.rsi, state: fryer_off }
+      verb: "Fry"
+      filterSummary: "fryer"
+    GRILL:
+      sprite: { rsi: icons/obj/machines/cooking_machines.rsi, state: grill_off }
+      verb: "Grill"
+      filterSummary: "grill"
+    SKILLET:
+      sprite: { rsi: icons/obj/machines/cooking_machines.rsi, state: skillet }
+      verb: "Skillet"
+      filterSummary: "skillet"
+    SAUCEPAN:
+      sprite: { rsi: icons/obj/machines/cooking_machines.rsi, state: pan }
+      verb: "Saucepan"
+      filterSummary: "saucepan"
+    POT:
+      sprite: { rsi: icons/obj/machines/cooking_machines.rsi, state: pot }
+      verb: "Boil"
+      filterSummary: "pot"
+    CHEESE:
+      sprite: { rsi: icons/obj/cooking_container.rsi, state: cheesecloth }
+      verb: "Age"
+      filterSummary: "cheese"
