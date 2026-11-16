@@ -39,6 +39,7 @@ export interface ProcessedGameData {
   readonly sortingIdRewrites: Record<string, string>;
   readonly repo: string;
   readonly commitHash: string;
+  readonly texturesPath?: string;
 }
 
 export const saveData = async (
@@ -86,6 +87,11 @@ export const saveData = async (
 
       for (const solid of Object.keys(recipe.solids)) {
         ingredients.add(solid);
+      }
+      for (const alts of Object.values(recipe.alts ?? {})) {
+        for (const alt of alts) {
+          ingredients.add(alt);
+        }
       }
     }
 
@@ -145,6 +151,7 @@ export const saveData = async (
         commit: d.commitHash,
         repo: d.repo,
         date: now,
+        texturesPath: d.texturesPath,
       },
     });
   }

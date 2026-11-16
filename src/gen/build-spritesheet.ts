@@ -53,13 +53,14 @@ export const buildSpriteSheet = async (
   resolved: ResolvedGameData,
   textureDir: string,
   mixFillState: string,
-  spriteOffsets: SpriteOffsets
+  spriteOffsets: SpriteOffsets,
+  mixFillPath?: string
 ): Promise<SpriteSheetData> => {
   const {
     spritesByKey,
     entityToSpriteKey,
     beakerFillKey,
-  } = collectSprites(resolved, mixFillState, spriteOffsets);
+  } = collectSprites(resolved, mixFillState, spriteOffsets, mixFillPath);
   const spriteCount = spritesByKey.size;
 
   const width = SpriteSize * SheetWidth;
@@ -114,7 +115,8 @@ export const buildSpriteSheet = async (
 const collectSprites = (
   resolved: ResolvedGameData,
   mixFillState: string,
-  spriteOffsets: SpriteOffsets
+  spriteOffsets: SpriteOffsets,
+  mixFillPath?: string
 ): SpriteCollection => {
   // Mapping from sprite key to sprite data.
   const spritesByKey = new Map<string, DrawableSprite>();
@@ -144,7 +146,7 @@ const collectSprites = (
   const beakerFillSprite: DrawableSprite = {
     offset: beakerLargeSprite.offset,
     layers: [{
-      path: beakerLargeSprite.layers[0].path,
+      path: mixFillPath ?? beakerLargeSprite.layers[0].path,
       state: mixFillState,
       color: ColorWhite,
     }],

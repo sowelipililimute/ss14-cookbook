@@ -250,6 +250,7 @@ interface ResolvedRecipeBase {
   readonly reagentResult: ReagentId | null;
   readonly resultQty?: number;
   readonly solids: Record<EntityId, number>;
+  readonly alts?: Record<EntityId, readonly EntityId[]>;
   readonly reagents: Record<ReagentId, ReagentIngredient>;
   readonly group: string;
 }

@@ -11,6 +11,7 @@ import { findResourceFiles, readRawGameData } from './read-raw';
 import { resolveComponents } from './resolve-components';
 import { resolvePrototypes } from './resolve-prototypes';
 import { resolveSpecials } from './resolve-specials';
+import { DmForkInfo, buildDmFork } from './dm';
 import { ProcessedGameData, saveData } from './save-data';
 import {
   MethodEntities,
@@ -21,6 +22,7 @@ import {
 } from './types';
 
 interface ForkInfo {
+  readonly sourceKind?: 'ss14';
   readonly name: string;
   readonly description: string;
   readonly hidden?: boolean;
@@ -185,11 +187,17 @@ const main = async () => {
     return;
   }
 
-  const forkList = readYamlFile(forkListPath) as Readonly<Record<string, ForkInfo>>;
+  const forkList = readYamlFile(forkListPath) as Readonly<
+    Record<string, ForkInfo | DmForkInfo>
+  >;
 
   const forkData: ProcessedGameData[] = [];
   for (const [id, fork] of Object.entries(forkList)) {
-    forkData.push(await buildFork(id, fork));
+    forkData.push(
+      fork.sourceKind === 'dm'
+        ? await buildDmFork(id, fork)
+        : await buildFork(id, fork)
+    );
     console.log('');
   }
 

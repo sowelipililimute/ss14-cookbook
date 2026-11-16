@@ -109,11 +109,14 @@ export const App = ({ forks }: Props): ReactElement => {
               {` on ${formatDate(meta.date)}.`}
             </p>
             <p>
-              Made by Alice Heurlin / Arimah, 2024.
+              Original SS14-Cookbook made by Alice Heurlin / Arimah, 2024.
               {' '}
               Discord: @arimah.
               {' '}
               GitHub: <a href='https://github.com/arimah' target='_blank' rel='noopener'>arimah</a>.
+            </p>
+            <p>
+              Adapted cookbook made by a lizard.
             </p>
             <p>
               {'Sprites were made by many contributors: '}
