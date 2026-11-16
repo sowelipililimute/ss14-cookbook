@@ -112,6 +112,11 @@ interface RecipeBase {
    */
   readonly resultQty?: number;
   readonly solids: Readonly<Record<string, number>>;
+  /**
+   * Entities that can stand in for a solid ingredient, keyed by the ID in
+   * `solids`. "Any of" ingredients in forks that match by type or tag.
+   */
+  readonly alts?: Readonly<Record<string, readonly string[]>>;
   readonly reagents: Readonly<Record<string, ReagentIngredient>>;
   readonly group: string;
 }
@@ -122,7 +127,7 @@ interface RecipeBase {
  */
 export interface MicrowaveRecipe extends RecipeBase {
   readonly method: 'microwave';
-  /** Cook time, in seconds. */
+  /** Cook time, in seconds. Zero means the fork has no meaningful time. */
   readonly time: number;
   readonly solidResult: string;
   readonly reagentResult: null;
@@ -287,4 +292,9 @@ export interface MetaData {
   readonly commit: string;
   readonly repo: string;
   readonly date: number;
+  /**
+   * Repo-relative folder that sprite attribution paths are relative to.
+   * Absent for SS14 forks (`Resources/Textures`).
+   */
+  readonly texturesPath?: string;
 }

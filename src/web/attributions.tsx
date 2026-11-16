@@ -19,8 +19,7 @@ import { getPopupRoot } from './popup';
 import { RawSprite } from './sprites';
 import { Tooltip } from './tooltip';
 
-// TODO: Move this somewhere else probably
-const TexturesSubPath = 'Resources/Textures';
+const DefaultTexturesSubPath = 'Resources/Textures';
 
 export interface Props {
   value: readonly SpriteAttribution[];
@@ -98,10 +97,11 @@ interface AttributionItemProps {
 }
 
 const AttributionItem = ({ attr, meta }: AttributionItemProps) => {
+  const texturesPath = meta.texturesPath ?? DefaultTexturesSubPath;
   const pathUrl = GitHubFolderUrl(
     meta.repo,
     meta.commit,
-    `${TexturesSubPath}/${attr.path}`
+    texturesPath ? `${texturesPath}/${attr.path}` : attr.path
   );
 
   return (

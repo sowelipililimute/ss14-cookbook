@@ -9,6 +9,7 @@ import { ReagentInfoPopup, RecipePopup } from './popup';
 export interface RecipeIngredientsProps {
   visible: boolean;
   solids: Readonly<Record<string, number>>;
+  alts?: Readonly<Record<string, readonly string[]>>;
   reagents: Readonly<Record<string, ReagentIngredientData>>;
 }
 
@@ -17,6 +18,7 @@ const IngredientSpriteHeight = 32;
 export const RecipeIngredients = memo(({
   visible,
   solids,
+  alts,
   reagents,
 }: RecipeIngredientsProps): ReactElement => {
   if (!visible) {
@@ -36,7 +38,7 @@ export const RecipeIngredients = memo(({
   return (
     <div className='recipe_ingredients'>
       {Object.entries(solids).map(([entId, qty]) =>
-        <SolidIngredient key={entId} id={entId} qty={qty}/>
+        <SolidIngredient key={entId} id={entId} qty={qty} alts={alts?.[entId]}/>
       )}
       {Object.entries(reagents).map(([reagentId, ingredient]) =>
         <ReagentIngredient
@@ -53,11 +55,17 @@ export const RecipeIngredients = memo(({
 export interface SolidIngredientProps {
   id: string;
   qty?: number;
+  /** Other entities that can be used instead of this one. */
+  alts?: readonly string[];
 }
+
+/** Maximum number of alternatives named in the tooltip. */
+const MaxListedAlts = 8;
 
 export const SolidIngredient = ({
   id,
   qty,
+  alts,
 }: SolidIngredientProps): ReactElement => {
   const { entityMap, recipesBySolidResult } = useGameData();
   const entity = entityMap.get(id)!;
@@ -75,9 +83,35 @@ export const SolidIngredient = ({
             </span>
           </RecipePopup>
         ) : entity.name}
+        {alts && alts.length > 0 && (
+          <AlternativesNote alts={alts}/>
+        )}
       </span>
     </span>
   );
+};
+
+const AlternativesNote = ({
+  alts,
+}: {
+  alts: readonly string[];
+}): ReactElement => {
+  const { entityMap } = useGameData();
+  const names = alts
+    .slice(0, MaxListedAlts)
+    .map(alt => entityMap.get(alt)?.name ?? alt);
+  const more = alts.length - names.length;
+  const text = `Or any of: ${names.join(', ')}${
+    more > 0 ? `, and ${more} more` : ''
+  }`;
+  return <>
+    {' '}
+    <Tooltip text={text}>
+      <span className='recipe_alternatives'>
+        or {alts.length} other{alts.length === 1 ? '' : 's'}
+      </span>
+    </Tooltip>
+  </>;
 };
 
 export interface ReagentIngredientProps {

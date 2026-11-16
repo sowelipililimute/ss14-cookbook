@@ -17,8 +17,31 @@ export const displayMethod = (recipe: Recipe): DisplayMethod => {
 };
 
 /**
+ * Whether a recipe's solid ingredient slot (identified by its main entity ID)
+ * can be filled by the given entity: either the main entity itself or one of
+ * its alternatives.
+ */
+const slotAccepts = (
+  recipe: Recipe,
+  slot: string,
+  entityId: string
+): boolean =>
+  slot === entityId || (recipe.alts?.[slot]?.includes(entityId) ?? false);
+
+/** Whether any solid ingredient slot in the recipe accepts the entity. */
+export const recipeUsesSolid = (recipe: Recipe, entityId: string): boolean => {
+  for (const slot in recipe.solids) {
+    if (slotAccepts(recipe, slot, entityId)) {
+      return true;
+    }
+  }
+  return false;
+};
+
+/**
  * Tests whether a recipe contains ANY solid ingredient from the
- * specified set.
+ * specified set. An ingredient with alternatives matches if the ingredient
+ * itself or any alternative is in the set.
  *
  * If the recipe has no solid ingredients, it will NOT match.
  */
@@ -26,8 +49,11 @@ export const recipeHasAnyIngredient = (
   recipe: Recipe,
   ingredients: ReadonlySet<string>
 ): boolean => {
-  for (const id in recipe.solids) {
-    if (ingredients.has(id)) {
+  for (const slot in recipe.solids) {
+    if (ingredients.has(slot)) {
+      return true;
+    }
+    if (recipe.alts?.[slot]?.some(alt => ingredients.has(alt))) {
       return true;
     }
   }
@@ -44,17 +70,12 @@ export const recipeHasAllIngredients = (
   recipe: Recipe,
   ingredients: ReadonlySet<string>
 ): boolean => {
-  if (ingredients.size === 0) {
-    return true;
-  }
-
-  let matching = 0;
-  for (const id in recipe.solids) {
-    if (ingredients.has(id)) {
-      matching++;
+  for (const id of ingredients) {
+    if (!recipeUsesSolid(recipe, id)) {
+      return false;
     }
   }
-  return matching === ingredients.size;
+  return true;
 };
 
 /**
@@ -68,8 +89,11 @@ export const recipeHasOnlyIngredients = (
   recipe: Recipe,
   ingredients: ReadonlySet<string>
 ): boolean => {
-  for (const id in recipe.solids) {
-    if (!ingredients.has(id)) {
+  for (const slot in recipe.solids) {
+    if (
+      !ingredients.has(slot) &&
+      !recipe.alts?.[slot]?.some(alt => ingredients.has(alt))
+    ) {
       return false;
     }
   }

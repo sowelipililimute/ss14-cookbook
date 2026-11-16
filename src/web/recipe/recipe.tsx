@@ -109,6 +109,7 @@ export const Recipe = memo(({
         <RecipeIngredients
           visible={visible}
           solids={recipe.solids}
+          alts={recipe.alts}
           reagents={recipe.reagents}
         />
       )}

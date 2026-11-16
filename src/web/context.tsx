@@ -58,6 +58,11 @@ export const GameDataProvider = memo(({
       for (const id of Object.keys(recipe.solids)) {
         appendAtKey(recipesBySolidIngredient, id, recipe.id);
       }
+      for (const alts of Object.values(recipe.alts ?? {})) {
+        for (const id of alts) {
+          appendAtKey(recipesBySolidIngredient, id, recipe.id);
+        }
+      }
       for (const id of Object.keys(recipe.reagents)) {
         appendAtKey(recipesByReagentIngredient, id, recipe.id);
       }

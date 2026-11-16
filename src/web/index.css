@@ -935,6 +935,13 @@ select {
       cursor: help;
     }
 
+    .recipe_alternatives {
+      font-size: 0.85rem;
+      opacity: 0.75;
+      text-decoration: underline dotted;
+      cursor: help;
+    }
+
     .recipe_ingredient-help {
       flex: none;
       padding: 4px;
